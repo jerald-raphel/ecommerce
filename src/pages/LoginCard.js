@@ -122,7 +122,6 @@
 
 // export default LoginSignupCard;
 
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/LoginCard.css';
@@ -140,20 +139,26 @@ const LoginSignupCard = ({ onLoginSuccess }) => {
 
   const navigate = useNavigate();
 
+  // Toggle between signup and login
   const toggleMode = () => {
     setIsSignup(!isSignup);
     setFormData({ name: '', email: '', password: '', address: '' });
   };
 
+  // Handle form field changes
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Handle form submission (Signup or Login)
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Use environment variable or fallback to a local URL in development
+    const API_BASE = process.env.REACT_APP_API_BASE || 'http://localhost:3000/api';
     const endpoint = isSignup
-      ? 'http://localhost:3000/api/signup' || 'https://ecommerce-server-awvj.onrender.com/api/signup'
-      : 'http://localhost:3000/api/login' || 'https://ecommerce-server-awvj.onrender.com/api/login';
+      ? `${API_BASE}/signup`
+      : `${API_BASE}/login`;
 
     const payload = isSignup
       ? formData
