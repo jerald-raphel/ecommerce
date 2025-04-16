@@ -153,26 +153,23 @@ const LoginSignupCard = ({ onLoginSuccess }) => {
   // Handle form submission (Signup or Login)
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Use environment variable or fallback to a local URL in development
-    const API_BASE = process.env.REACT_APP_API_BASE || 'http://localhost:3000/api';
     const endpoint = isSignup
-      ? `${API_BASE}/signup`
-      : `${API_BASE}/login`;
-
+      ? 'https://ecommerce-server-awvj.onrender.com/api/signup'
+      : 'https://ecommerce-server-awvj.onrender.com/api/login';
+  
     const payload = isSignup
       ? formData
       : { email: formData.email, password: formData.password };
-
+  
     try {
       const res = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
-
+  
       const result = await res.json();
-
+      
       if (result.success) {
         if (isSignup) {
           alert('Signup successful! Please login.');
@@ -190,7 +187,7 @@ const LoginSignupCard = ({ onLoginSuccess }) => {
       console.error('Network or server error:', err);
     }
   };
-
+  
   if (!showCard) return null;
 
   return (
