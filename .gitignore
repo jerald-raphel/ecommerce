@@ -1,3 +1,6 @@
+# Node.js
 node_modules/
-build/
+npm-debug.log
+
+# Environment files
 .env

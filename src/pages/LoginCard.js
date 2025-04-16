@@ -123,7 +123,6 @@
 // export default LoginSignupCard;
 
 
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/LoginCard.css';
@@ -141,9 +140,6 @@ const LoginSignupCard = ({ onLoginSuccess }) => {
 
   const navigate = useNavigate();
 
-  // 🔁 API base from env or fallback to local
-  const API_BASE = process.env.REACT_APP_API_BASE || 'http://localhost:3000/api';
-
   const toggleMode = () => {
     setIsSignup(!isSignup);
     setFormData({ name: '', email: '', password: '', address: '' });
@@ -155,10 +151,9 @@ const LoginSignupCard = ({ onLoginSuccess }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const endpoint = isSignup
-      ? `${API_BASE}/signup`
-      : `${API_BASE}/login`;
+      ? 'http://localhost:3000/api/signup' || 'https://ecommerce-server-awvj.onrender.com/api/signup'
+      : 'http://localhost:3000/api/login' || 'https://ecommerce-server-awvj.onrender.com/api/login';
 
     const payload = isSignup
       ? formData
@@ -197,7 +192,7 @@ const LoginSignupCard = ({ onLoginSuccess }) => {
     <div className="login-card-overlay">
       <div className="login-card">
         <img
-          src={crossIcon}
+          src={crossIcon} // <-- use imported image here
           alt="Close"
           className="close-icon"
           onClick={() => setShowCard(false)}
