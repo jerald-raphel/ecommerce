@@ -154,8 +154,8 @@ const LoginSignupCard = ({ onLoginSuccess }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const endpoint = isSignup
-      ? 'https://ecommerce-server-awvj.onrender.com/api/signup'
-      : 'https://ecommerce-server-awvj.onrender.com/api/login';
+      ? 'https://ecommerce-server-orkq.onrender.com/api/signup'
+      : 'https://ecommerce-server-orkq.onrender.comapi/login';
   
     const payload = isSignup
       ? formData
