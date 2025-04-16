@@ -1,8 +1,11 @@
 // import React, { useState } from 'react';
+// import { useNavigate } from 'react-router-dom';
 // import '../styles/LoginCard.css';
+// import crossIcon from '../assets/close-icon.png'; // <-- import image
 
 // const LoginSignupCard = ({ onLoginSuccess }) => {
 //   const [isSignup, setIsSignup] = useState(false);
+//   const [showCard, setShowCard] = useState(true);
 //   const [formData, setFormData] = useState({
 //     name: '',
 //     email: '',
@@ -10,24 +13,23 @@
 //     address: ''
 //   });
 
+//   const navigate = useNavigate();
+
 //   const toggleMode = () => {
 //     setIsSignup(!isSignup);
-//     setFormData({
-//       name: '',
-//       email: '',
-//       password: '',
-//       address: ''
-//     });
+//     setFormData({ name: '', email: '', password: '', address: '' });
 //   };
 
-//   const handleChange = e => {
+//   const handleChange = (e) => {
 //     setFormData({ ...formData, [e.target.name]: e.target.value });
 //   };
 
-//   const handleSubmit = async e => {
+//   const handleSubmit = async (e) => {
 //     e.preventDefault();
+//     const endpoint = isSignup
+//       ? 'http://localhost:3000/api/signup'
+//       : 'http://localhost:3000/api/login';
 
-//     const endpoint = isSignup ?'http://localhost:4000/api/signup' : 'http://localhost:4000/api/login';
 //     const payload = isSignup
 //       ? formData
 //       : { email: formData.email, password: formData.password };
@@ -36,12 +38,8 @@
 //       const res = await fetch(endpoint, {
 //         method: 'POST',
 //         headers: { 'Content-Type': 'application/json' },
-//         body: JSON.stringify(payload)
+//         body: JSON.stringify(payload),
 //       });
-
-//       if (!res.ok) {
-//         throw new Error(`HTTP error! status: ${res.status}`);
-//       }
 
 //       const result = await res.json();
 
@@ -50,7 +48,9 @@
 //           alert('Signup successful! Please login.');
 //           toggleMode();
 //         } else {
-//           onLoginSuccess();
+//           setShowCard(false);
+//           onLoginSuccess?.();
+//           navigate('/addproduct');
 //         }
 //       } else {
 //         alert(result.message || 'Something went wrong. Please try again.');
@@ -61,9 +61,17 @@
 //     }
 //   };
 
+//   if (!showCard) return null;
+
 //   return (
 //     <div className="login-card-overlay">
 //       <div className="login-card">
+//         <img
+//           src={crossIcon} // <-- use imported image here
+//           alt="Close"
+//           className="close-icon"
+//           onClick={() => setShowCard(false)}
+//         />
 //         <h2>{isSignup ? 'Sign Up' : 'Login'}</h2>
 //         <form onSubmit={handleSubmit}>
 //           {isSignup && (
@@ -115,6 +123,7 @@
 // export default LoginSignupCard;
 
 
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/LoginCard.css';
@@ -132,6 +141,9 @@ const LoginSignupCard = ({ onLoginSuccess }) => {
 
   const navigate = useNavigate();
 
+  // 🔁 API base from env or fallback to local
+  const API_BASE = process.env.REACT_APP_API_BASE || 'http://localhost:3000/api';
+
   const toggleMode = () => {
     setIsSignup(!isSignup);
     setFormData({ name: '', email: '', password: '', address: '' });
@@ -143,9 +155,10 @@ const LoginSignupCard = ({ onLoginSuccess }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const endpoint = isSignup
-      ? 'http://localhost:3000/api/signup'
-      : 'http://localhost:3000/api/login';
+      ? `${API_BASE}/signup`
+      : `${API_BASE}/login`;
 
     const payload = isSignup
       ? formData
@@ -184,7 +197,7 @@ const LoginSignupCard = ({ onLoginSuccess }) => {
     <div className="login-card-overlay">
       <div className="login-card">
         <img
-          src={crossIcon} // <-- use imported image here
+          src={crossIcon}
           alt="Close"
           className="close-icon"
           onClick={() => setShowCard(false)}
