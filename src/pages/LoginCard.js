@@ -155,19 +155,19 @@ const LoginSignupCard = ({ onLoginSuccess }) => {
     e.preventDefault();
     const endpoint = isSignup
       ? 'https://ecommerce-server-orkq.onrender.com/api/signup'
-      : 'https://ecommerce-server-orkq.onrender.comapi/login';
-  
+      : 'https://ecommerce-server-orkq.onrender.com/api/login'; // Corrected URL
+
     const payload = isSignup
       ? formData
       : { email: formData.email, password: formData.password };
-  
+
     try {
       const res = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
-  
+
       const result = await res.json();
       
       if (result.success) {
