@@ -153,7 +153,7 @@ const LoginSignupCard = ({ onLoginSuccess }) => {
 
     const endpoint = isSignup
       ? 'https://ecommerce-server-orkq.onrender.com/api/signup'
-      : 'https:https://ecommerce-server-orkq.onrender.com/api/signup';
+      : 'https://ecommerce-server-orkq.onrender.com/api/login';
 
     const payload = isSignup
       ? formData
