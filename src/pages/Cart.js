@@ -577,7 +577,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import '../styles/Cart.css';
-import CloseIcon from '../assets/close-icon.png';
+import CloseIcon from '../assets/close-icon.png'; // <-- import image
 
 const Cart = () => {
   const { cartItems, removeFromCart, updateQuantity, getCartTotal } = useCart();
@@ -587,9 +587,10 @@ const Cart = () => {
     email: '',
     address: ''
   });
-
-  // 🌐 Use env variable or fallback to localhost
-  const API_BASE = process.env.REACT_APP_API_BASE || 'https://ecommerce-server-awvj.onrender.com/api/send-email';
+  const [formError, setFormError] = useState('');
+  
+  // Directly use the Render API URL
+  const API_BASE = 'https://ecommerce-server-awvj.onrender.com/api';
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -601,12 +602,12 @@ const Cart = () => {
 
     // 🛠️ Validate form data
     if (!formData.name || !formData.email || !formData.address) {
-      alert('Please fill in all the fields!');
+      setFormError('Please fill in all the fields!');
       return;
     }
 
     try {
-      const response = await fetch('https://ecommerce-server-awvj.onrender.com/api/send-email', {
+      const response = await fetch(`${API_BASE}/send-email`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -713,6 +714,7 @@ const Cart = () => {
               />
               <h2>Shipping Information</h2>
               <form onSubmit={handleFormSubmit}>
+                {formError && <div className="form-error">{formError}</div>}
                 <div className="form-group">
                   <label>Name</label>
                   <input 
