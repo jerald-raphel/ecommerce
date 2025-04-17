@@ -572,23 +572,18 @@
 
 
 
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import '../styles/Cart.css';
-import CloseIcon from '../assets/close-icon.png'; // <-- import image
+import CloseIcon from '../assets/close-icon.png'; // make sure this file exists
 
 const Cart = () => {
   const { cartItems, removeFromCart, updateQuantity, getCartTotal } = useCart();
   const [showCheckoutForm, setShowCheckoutForm] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    address: ''
-  });
+  const [formData, setFormData] = useState({ name: '', email: '', address: '' });
   const [formError, setFormError] = useState('');
-  
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -597,10 +592,11 @@ const Cart = () => {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
-    // 🛠️ Validate form data
     if (!formData.name || !formData.email || !formData.address) {
       setFormError('Please fill in all the fields!');
       return;
+    } else {
+      setFormError('');
     }
 
     try {
@@ -614,9 +610,9 @@ const Cart = () => {
           total: getCartTotal().toFixed(2),
         })
       });
-    
+
       const data = await response.json();
-    
+
       if (response.ok && data.success) {
         alert('Order placed! A confirmation email has been sent.');
         setShowCheckoutForm(false);
@@ -625,9 +621,9 @@ const Cart = () => {
       }
     } catch (err) {
       console.error('Error sending email:', err);
-      alert('Error sending email. ' + err.message);
+      alert('Error sending email: ' + err.message);
     }
-    
+  };
 
   return (
     <div className="cart">
@@ -648,29 +644,14 @@ const Cart = () => {
                     <h3>{item.name}</h3>
                     <p className="price">${item.price.toFixed(2)}</p>
                     <div className="quantity-controls">
-                      <button 
-                        onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                        className="quantity-btn"
-                      >
-                        -
-                      </button>
+                      <button onClick={() => updateQuantity(item.id, item.quantity - 1)} className="quantity-btn">-</button>
                       <span>{item.quantity}</span>
-                      <button 
-                        onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                        className="quantity-btn"
-                      >
-                        +
-                      </button>
+                      <button onClick={() => updateQuantity(item.id, item.quantity + 1)} className="quantity-btn">+</button>
                     </div>
                   </div>
                   <div className="cart-item-total">
                     <p>${(item.price * item.quantity).toFixed(2)}</p>
-                    <button 
-                      onClick={() => removeFromCart(item.id)}
-                      className="remove-btn"
-                    >
-                      Remove
-                    </button>
+                    <button onClick={() => removeFromCart(item.id)} className="remove-btn">Remove</button>
                   </div>
                 </div>
               ))}
@@ -690,10 +671,7 @@ const Cart = () => {
                 <span>Total</span>
                 <span>${getCartTotal().toFixed(2)}</span>
               </div>
-              <button 
-                className="btn btn-primary checkout-btn"
-                onClick={() => setShowCheckoutForm(true)}
-              >
+              <button className="btn btn-primary checkout-btn" onClick={() => setShowCheckoutForm(true)}>
                 Proceed to Checkout
               </button>
             </div>
@@ -703,43 +681,21 @@ const Cart = () => {
         {showCheckoutForm && (
           <div className="checkout-form-overlay">
             <div className="checkout-form-card">
-              <img 
-                src={CloseIcon} 
-                alt="Close" 
-                className="close-icon" 
-                onClick={() => setShowCheckoutForm(false)} 
-              />
+              <img src={CloseIcon} alt="Close" className="close-icon" onClick={() => setShowCheckoutForm(false)} />
               <h2>Shipping Information</h2>
               <form onSubmit={handleFormSubmit}>
                 {formError && <div className="form-error">{formError}</div>}
                 <div className="form-group">
                   <label>Name</label>
-                  <input 
-                    type="text" 
-                    name="name" 
-                    value={formData.name} 
-                    onChange={handleChange} 
-                    required 
-                  />
+                  <input type="text" name="name" value={formData.name} onChange={handleChange} required />
                 </div>
                 <div className="form-group">
                   <label>Email</label>
-                  <input 
-                    type="email" 
-                    name="email" 
-                    value={formData.email} 
-                    onChange={handleChange} 
-                    required 
-                  />
+                  <input type="email" name="email" value={formData.email} onChange={handleChange} required />
                 </div>
                 <div className="form-group">
                   <label>Address</label>
-                  <textarea 
-                    name="address" 
-                    value={formData.address} 
-                    onChange={handleChange} 
-                    required 
-                  ></textarea>
+                  <textarea name="address" value={formData.address} onChange={handleChange} required></textarea>
                 </div>
                 <button type="submit" className="btn btn-primary">Submit</button>
               </form>
