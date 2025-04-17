@@ -153,10 +153,11 @@
     // Handle form submission (Signup or Login)
     const handleSubmit = async (e) => {
       e.preventDefault();
-      const API_BASE = process.env.REACT_APP_API_BASE;
+      
       const endpoint = isSignup
-        ? `${API_BASE}/api/signup`
-        : `${API_BASE}/api/login`;
+      ? 'https://ecommerce-server-orkq.onrender.com:10000/api/signup'
+      : 'https://ecommerce-server-orkq.onrender.com:10000/api/login';
+    
     
       const payload = isSignup
         ? formData
