@@ -201,6 +201,7 @@ const LoginSignupCard = ({ onLoginSuccess }) => {
         console.error('❌ Network or logic error:', err);
         alert('Something went wrong. Please check the console for more info.');
       }
+  };
       
 
   if (!showCard) return null;
