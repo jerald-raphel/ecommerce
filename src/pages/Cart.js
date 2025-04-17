@@ -589,7 +589,7 @@ const Cart = () => {
   });
 
   // 🌐 Use env variable or fallback to localhost
-  const API_BASE = process.env.REACT_APP_API_BASE || 'http://localhost:3000/api';
+  const API_BASE = process.env.REACT_APP_API_BASE || 'https://ecommerce-server-awvj.onrender.com/api/send-email';
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -606,7 +606,7 @@ const Cart = () => {
     }
 
     try {
-      const response = await fetch(`${API_BASE}/send-email`, {
+      const response = await fetch('https://ecommerce-server-awvj.onrender.com/api/send-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
