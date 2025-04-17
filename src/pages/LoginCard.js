@@ -122,129 +122,131 @@
 
 // export default LoginSignupCard;
 
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import '../styles/LoginCard.css';
-import crossIcon from '../assets/close-icon.png'; // <-- import image
+  import React, { useState } from 'react';
+  import { useNavigate } from 'react-router-dom';
+  import '../styles/LoginCard.css';
+  import crossIcon from '../assets/close-icon.png'; // <-- import image
 
-const LoginSignupCard = ({ onLoginSuccess }) => {
-  const [isSignup, setIsSignup] = useState(false);
-  const [showCard, setShowCard] = useState(true);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    address: ''
-  });
+  const LoginSignupCard = ({ onLoginSuccess }) => {
+    const [isSignup, setIsSignup] = useState(false);
+    const [showCard, setShowCard] = useState(true);
+    const [formData, setFormData] = useState({
+      name: '',
+      email: '',
+      password: '',
+      address: ''
+    });
 
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  // Toggle between signup and login
-  const toggleMode = () => {
-    setIsSignup(!isSignup);
-    setFormData({ name: '', email: '', password: '', address: '' });
-  };
+    // Toggle between signup and login
+    const toggleMode = () => {
+      setIsSignup(!isSignup);
+      setFormData({ name: '', email: '', password: '', address: '' });
+    };
 
-  // Handle form field changes
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+    // Handle form field changes
+    const handleChange = (e) => {
+      setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
 
-  // Handle form submission (Signup or Login)
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const endpoint = isSignup
-      ? 'https://ecommerce-server-orkq.onrender.com/api/signup'
-      : 'https://ecommerce-server-orkq.onrender.com/api/login'; // Corrected URL
-
-    const payload = isSignup
-      ? formData
-      : { email: formData.email, password: formData.password };
-
-    try {
-      const res = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-
-      const result = await res.json();
-      
-      if (result.success) {
-        if (isSignup) {
-          alert('Signup successful! Please login.');
-          toggleMode();
+    // Handle form submission (Signup or Login)
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      const API_BASE = process.env.REACT_APP_API_BASE;
+      const endpoint = isSignup
+        ? `${API_BASE}/api/signup`
+        : `${API_BASE}/api/login`;
+    
+      const payload = isSignup
+        ? formData
+        : { email: formData.email, password: formData.password };
+    
+      try {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+    
+        const result = await res.json();
+    
+        if (result.success) {
+          if (isSignup) {
+            alert('Signup successful! Please login.');
+            toggleMode();
+          } else {
+            setShowCard(false);
+            onLoginSuccess?.();
+            navigate('/addproduct');
+          }
         } else {
-          setShowCard(false);
-          onLoginSuccess?.();
-          navigate('/addproduct');
+          alert(result.message || 'Something went wrong. Please try again.');
         }
-      } else {
-        alert(result.message || 'Something went wrong. Please try again.');
+      } catch (err) {
+        alert('Network error. Please try again later.');
+        console.error('Network or server error:', err);
       }
-    } catch (err) {
-      alert('Network error. Please try again later.');
-      console.error('Network or server error:', err);
-    }
-  };
-  
-  if (!showCard) return null;
+    };
+    
+    
+    if (!showCard) return null;
 
-  return (
-    <div className="login-card-overlay">
-      <div className="login-card">
-        <img
-          src={crossIcon} // <-- use imported image here
-          alt="Close"
-          className="close-icon"
-          onClick={() => setShowCard(false)}
-        />
-        <h2>{isSignup ? 'Sign Up' : 'Login'}</h2>
-        <form onSubmit={handleSubmit}>
-          {isSignup && (
+    return (
+      <div className="login-card-overlay">
+        <div className="login-card">
+          <img
+            src={crossIcon} // <-- use imported image here
+            alt="Close"
+            className="close-icon"
+            onClick={() => setShowCard(false)}
+          />
+          <h2>{isSignup ? 'Sign Up' : 'Login'}</h2>
+          <form onSubmit={handleSubmit}>
+            {isSignup && (
+              <input
+                name="name"
+                placeholder="Name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+              />
+            )}
             <input
-              name="name"
-              placeholder="Name"
-              value={formData.name}
+              name="email"
+              placeholder="Email"
+              type="email"
+              value={formData.email}
               onChange={handleChange}
               required
             />
-          )}
-          <input
-            name="email"
-            placeholder="Email"
-            type="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-          <input
-            name="password"
-            placeholder="Password"
-            type="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
-          {isSignup && (
             <input
-              name="address"
-              placeholder="Address"
-              value={formData.address}
+              name="password"
+              placeholder="Password"
+              type="password"
+              value={formData.password}
               onChange={handleChange}
               required
             />
-          )}
-          <button type="submit">{isSignup ? 'Sign Up' : 'Login'}</button>
-        </form>
-        <div className="toggle-link" onClick={toggleMode}>
-          {isSignup
-            ? 'Already have an account? Login'
-            : "Don't have an account? Sign up"}
+            {isSignup && (
+              <input
+                name="address"
+                placeholder="Address"
+                value={formData.address}
+                onChange={handleChange}
+                required
+              />
+            )}
+            <button type="submit">{isSignup ? 'Sign Up' : 'Login'}</button>
+          </form>
+          <div className="toggle-link" onClick={toggleMode}>
+            {isSignup
+              ? 'Already have an account? Login'
+              : "Don't have an account? Sign up"}
+          </div>
         </div>
       </div>
-    </div>
-  );
-};
+    );
+  };
 
-export default LoginSignupCard;
+  export default LoginSignupCard;
