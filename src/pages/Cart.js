@@ -589,9 +589,6 @@ const Cart = () => {
   });
   const [formError, setFormError] = useState('');
   
-  // Directly use the Render API URL
-  const API_BASE = 'https://ecommerce-server-awvj.onrender.com/api';
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -607,7 +604,7 @@ const Cart = () => {
     }
 
     try {
-      const response = await fetch(`${API_BASE}/send-email`, {
+      const response = await fetch('https://ecommerce-server-awvj.onrender.com/api/send-email', {  // Direct API URL
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
