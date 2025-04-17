@@ -125,7 +125,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/LoginCard.css';
-import crossIcon from '../assets/close-icon.png'; // <-- import image
+import crossIcon from '../assets/close-icon.png';
 
 const LoginSignupCard = ({ onLoginSuccess }) => {
   const [isSignup, setIsSignup] = useState(false);
@@ -134,30 +134,26 @@ const LoginSignupCard = ({ onLoginSuccess }) => {
     name: '',
     email: '',
     password: '',
-    address: ''
+    address: '',
   });
 
   const navigate = useNavigate();
 
-  // Toggle between signup and login
   const toggleMode = () => {
     setIsSignup(!isSignup);
-    setFormData({ name: '', email: '', password: '', address: '' }); // Fixed typo here (was: setFonnData)
+    setFormData({ name: '', email: '', password: '', address: '' });
   };
 
-  // Handle form field changes
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Handle form submission (Signup or Login)
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Corrected the API endpoint URL logic
     const endpoint = isSignup
-      ? 'https://ecommerce-server-awvj.onrender.com/api/signup ' // Correct URL for signup
-      : 'https://ecommerce-server-awvj.onrender.com/api/login ';  // Correct URL for login
+      ? 'https://ecommerce-server-awvj.onrender.com/api/signup'
+      : 'https://ecommerce-server-awvj.onrender.com/api/login';
 
     const payload = isSignup
       ? formData
@@ -170,23 +166,31 @@ const LoginSignupCard = ({ onLoginSuccess }) => {
         body: JSON.stringify(payload),
       });
 
+      // Check if server responded with success status
+      if (!res.ok) {
+        const errorText = await res.text();
+        throw new Error(`HTTP error ${res.status}: ${errorText}`);
+      }
+
       const result = await res.json();
+      console.log('API Response:', result);
 
       if (result.success) {
         if (isSignup) {
           alert('Signup successful! Please login.');
           toggleMode();
         } else {
+          alert('Login successful!');
           setShowCard(false);
           onLoginSuccess?.();
           navigate('/addproduct');
         }
       } else {
-        alert(result.message || 'Something went wrong. Please try again.');
+        alert(result.message || 'Login/signup failed.');
       }
     } catch (err) {
-      alert('Network error. Please try again later.');
-      console.error('Network or server error:', err);
+      console.error('Fetch error:', err);
+      alert('Server error or network issue. Please check the console for details.');
     }
   };
 
@@ -196,7 +200,7 @@ const LoginSignupCard = ({ onLoginSuccess }) => {
     <div className="login-card-overlay">
       <div className="login-card">
         <img
-          src={crossIcon} // <-- use imported image here
+          src={crossIcon}
           alt="Close"
           className="close-icon"
           onClick={() => setShowCard(false)}
