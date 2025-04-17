@@ -600,7 +600,7 @@ const Cart = () => {
     }
 
     try {
-      const response = await fetch('https://ecommerce-server-awvj.onrender.com/api/send-email', {
+      const response = await fetch('https://ecommerce-server-orkq.onrender.com/api/send-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
