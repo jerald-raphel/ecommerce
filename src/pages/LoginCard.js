@@ -156,8 +156,8 @@ const LoginSignupCard = ({ onLoginSuccess }) => {
 
     // Corrected the API endpoint URL logic
     const endpoint = isSignup
-      ? 'https://ecommerce-server-awvj.onrender.com/api/signup' // Correct URL for signup
-      : 'https://ecommerce-server-awvj.onrender.com/api/login';  // Correct URL for login
+      ? 'https://ecommerce-server-awvj.onrender.com/api/signup ' // Correct URL for signup
+      : 'https://ecommerce-server-awvj.onrender.com/api/login ';  // Correct URL for login
 
     const payload = isSignup
       ? formData
