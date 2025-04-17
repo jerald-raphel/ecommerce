@@ -604,7 +604,7 @@ const Cart = () => {
     }
 
     try {
-      const response = await fetch('https://ecommerce-server-awvj.onrender.com/api/send-email', {  // Direct API URL
+      const response = await fetch('https://ecommerce-server-awvj.onrender.com/api/send-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -614,9 +614,9 @@ const Cart = () => {
           total: getCartTotal().toFixed(2),
         })
       });
-
+    
       const data = await response.json();
-
+    
       if (response.ok && data.success) {
         alert('Order placed! A confirmation email has been sent.');
         setShowCheckoutForm(false);
@@ -625,9 +625,9 @@ const Cart = () => {
       }
     } catch (err) {
       console.error('Error sending email:', err);
-      alert('Error sending email.');
+      alert('Error sending email. ' + err.message);
     }
-  };
+    
 
   return (
     <div className="cart">
