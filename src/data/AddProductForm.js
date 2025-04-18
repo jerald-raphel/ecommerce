@@ -95,7 +95,7 @@ const AddProductForm = () => {
   });
 
   // 🌐 Use env variable or fallback to localhost
-  const API_BASE = process.env.REACT_APP_API_BASE || 'http://localhost:3000/api';
+  const API_BASE = process.env.REACT_APP_API_BASE || 'https://ecommerce-server-orkq.onrender.com/api/signup';
 
   const handleChange = (e) => {
     const { name, value } = e.target;
