@@ -18,13 +18,11 @@
 // const PORT = 3000;
 // app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
-
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
 
-// Initialize environment variables from .env file
 dotenv.config();
 
 const app = express();
@@ -34,15 +32,14 @@ const authRoutes = require('./routes/auth');
 const productRoutes = require('./routes/products');
 const smsRoutes = require('./routes/smsRoutes');
 
-// ✅ Fixed CORS Configuration
+// ✅ CORS Configuration
 const allowedOrigins = [
-  'https://ecommerce-fawn-pi.vercel.app', // Frontend production URL
-  'http://localhost:4000',                // Localhost for local testing
+  'ecommerce-mu-red-58.vercel.app',  // Your Vercel frontend URL
+  'http://localhost:4000',                 // Localhost for local testing
 ];
 
 const corsOptions = {
   origin: function (origin, callback) {
-    // Allow requests from the allowed origins or no origin (for Postman/Thunder Client)
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
@@ -50,8 +47,8 @@ const corsOptions = {
     }
   },
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true,  // If you are using cookies or sessions
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  allowedHeaders: ['Content-Type', 'Authorization'], // If you need Authorization headers or others
+  credentials: true,
 };
 
 // ✅ Apply middleware
@@ -69,9 +66,6 @@ const mongoURI = process.env.MONGO_URI || 'mongodb+srv://jerald-db:jerald07!@clu
 mongoose.connect(mongoURI, { tls: true })
   .then(() => console.log('MongoDB connected successfully'))
   .catch(err => console.error('MongoDB connection error:', err));
-
-// ✅ Preflight handling for CORS
-app.options('*', cors(corsOptions));  // Allow preflight requests for all routes
 
 // ✅ Start server
 const PORT = process.env.PORT || 4000;
