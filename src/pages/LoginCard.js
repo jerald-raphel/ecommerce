@@ -159,50 +159,47 @@ const LoginSignupCard = ({ onLoginSuccess }) => {
       ? formData
       : { email: formData.email, password: formData.password };
 
-      try {
-        const res = await fetch(endpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        });
-      
-        // Check for HTTP error status before calling .json()
-        if (!res.ok) {
-          const errorText = await res.text(); // in case it's HTML or plain text
-          console.error('Server responded with error:', errorText);
-          throw new Error(`HTTP ${res.status} - ${res.statusText}`);
-        }
-      
-        // Try parsing JSON safely
-        let result;
-        try {
-          result = await res.json();
-        } catch (jsonErr) {
-          console.error('Failed to parse JSON:', jsonErr);
-          throw new Error('Invalid response format from server.');
-        }
-      
-        console.log('✅ API Response:', result);
-      
-        if (result.success) {
-          if (isSignup) {
-            alert('Signup successful! Please login.');
-            toggleMode();
-          } else {
-            alert('Login successful!');
-            setShowCard(false);
-            onLoginSuccess?.();
-            navigate('/addproduct');
-          }
-        } else {
-          alert(result.message || 'Login/signup failed.');
-        }
-      } catch (err) {
-        console.error('❌ Network or logic error:', err);
-        alert('Something went wrong. Please check the console for more info.');
+    try {
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        const errorText = await res.text();
+        console.error('Server responded with error:', errorText);
+        throw new Error(`HTTP ${res.status} - ${res.statusText}`);
       }
+
+      let result;
+      try {
+        result = await res.json();
+      } catch (jsonErr) {
+        console.error('Failed to parse JSON:', jsonErr);
+        throw new Error('Invalid response format from server.');
+      }
+
+      console.log('✅ API Response:', result);
+
+      if (result.success) {
+        if (isSignup) {
+          alert('Signup successful! Please login.');
+          toggleMode();
+        } else {
+          alert('Login successful!');
+          setShowCard(false);
+          onLoginSuccess?.();
+          navigate('/addproduct');
+        }
+      } else {
+        alert(result.message || 'Login/signup failed.');
+      }
+    } catch (err) {
+      console.error('❌ Network or logic error:', err);
+      alert('Something went wrong. Please check the console for more info.');
+    }
   };
-      
 
   if (!showCard) return null;
 
