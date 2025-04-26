@@ -95,7 +95,7 @@ const AddProductForm = () => {
   });
 
   // 🌐 Use env variable or fallback to localhost
-  const API_BASE = process.env.REACT_APP_API_BASE || 'https://ecommerce-server-orkq.onrender.com/api/signup';
+  const API_BASE = process.env.REACT_APP_API_BASE || 'https://ecommerce-server-orkq.onrender.com/api/products';
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -104,8 +104,7 @@ const AddProductForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // 🛠️ Convert "Color: Black, Size: L" to object
+  
     const formattedSpecs = {};
     if (formData.specifications.trim()) {
       formData.specifications.split(',').forEach(pair => {
@@ -115,25 +114,25 @@ const AddProductForm = () => {
         }
       });
     }
-
+  
     const newProduct = {
       ...formData,
       price: parseFloat(formData.price),
       specifications: formattedSpecs
     };
-
+  
     try {
-      const res = await fetch(`${API_BASE}/products`, {
+      const res = await fetch(`${API_BASE}`, {  // ✅ fixed here
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newProduct)
       });
-
+  
       if (!res.ok) {
         const errorData = await res.json();
         throw new Error(errorData.error || 'Failed to add product');
       }
-
+  
       alert('✅ Product added successfully!');
       setFormData({
         name: '',
@@ -148,6 +147,7 @@ const AddProductForm = () => {
       alert(`❌ Error adding product: ${error.message}`);
     }
   };
+  
 
   return (
     <form onSubmit={handleSubmit} className="add-product-form">
