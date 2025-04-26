@@ -15,7 +15,7 @@ const NewProductDetail = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/api/products/${id}`);
+        const response = await fetch(`http://ecommerce-server-orkq.onrender.com/api/products/${id}`);
         if (!response.ok) throw new Error('Product not found');
         const data = await response.json();
         setProduct(data);

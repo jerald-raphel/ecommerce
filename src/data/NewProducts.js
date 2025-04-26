@@ -11,7 +11,7 @@ const NewProducts = () => {
     const fetchNewProducts = async () => {
       setLoading(true);
       try {
-        const response = await fetch('http://localhost:3000/api/products');
+        const response = await fetch('http://ecommerce-server-orkq.onrender.com/api/products');
         const data = await response.json();
 
         const recentProducts = data
